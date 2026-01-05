@@ -44,7 +44,7 @@ export interface PaySystem {
 }
 
 export interface AuthResponse {
-  session_id: string;
+  id: string;  // session_id from API
 }
 
 export interface ApiError {
