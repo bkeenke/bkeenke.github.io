@@ -122,13 +122,13 @@ export function ServicePage({ serviceId, onBack }: ServicePageProps) {
 
   return (
     <div className={styles.container}>
-      {!isTelegram && (
         <div className={styles.header}>
-          <button className={styles.backButtonHeader} onClick={onBack}>
-            <ChevronLeft size={24} color="#ffffff" />
-          </button>
+            {!isTelegram && (
+                <button className={styles.backButtonHeader} onClick={onBack}>
+                    <ChevronLeft size={24} color="#ffffff" />
+                </button>
+            )}
         </div>
-      )}
 
       <div className={styles.statusCard}>
         <div className={styles.statusIcon} style={{ backgroundColor: getStatusColor(service.status) }}>

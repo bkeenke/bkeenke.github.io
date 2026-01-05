@@ -1,6 +1,6 @@
 .tabBar {
   position: fixed;
-  bottom: 0;
+  bottom: 12px;
   width: 100%;
   z-index: 999;
   padding-left: var(--tg-safe-area-inset-left);

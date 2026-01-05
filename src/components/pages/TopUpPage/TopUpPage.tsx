@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, X } from 'lucide-react';
+import { ArrowLeft, X } from 'lucide-react';
 import { paymentApi, servicesApi } from '@/lib/api';
 import { PAYMENT_LINK_OUT } from '@/lib/config';
 import { Button, Loading } from '@/components';
@@ -157,13 +157,13 @@ export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPagePr
 
   return (
     <div className={styles.container}>
-      {!isTelegram && (
         <div className={styles.header}>
-          <button className={styles.backButton} onClick={onBack}>
-            <ChevronLeft size={24} color="#ffffff" />
-          </button>
+          {!isTelegram && (
+            <button className={styles.backButton} onClick={onBack}>
+              <ArrowLeft size={24} color="#ffffff" />
+            </button>
+          )}
         </div>
-      )}
 
       {error && (
         <div className={styles.errorNotice}>
