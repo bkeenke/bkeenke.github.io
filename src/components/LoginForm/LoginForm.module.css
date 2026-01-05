@@ -1,0 +1,95 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--hint-color);
+  margin: 0;
+}
+
+.form {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--section-bg-color);
+  color: var(--text-color);
+  font-size: 16px;
+  font-family: var(--font-family);
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+  color: var(--hint-color);
+}
+
+.input:focus {
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.error {
+  padding: 12px;
+  background: rgba(255, 59, 48, 0.1);
+  border-radius: 8px;
+  color: var(--danger-color);
+  font-size: 14px;
+  text-align: center;
+}
+
+.switchMode {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--hint-color);
+  font-size: 14px;
+}
+
+.switchMode p {
+  margin: 0;
+}
+
+.switchButton {
+  background: none;
+  border: none;
+  color: var(--link-color);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-family);
+}
+
+.switchButton:hover {
+  text-decoration: underline;
+}

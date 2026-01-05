@@ -1,0 +1,138 @@
+.sectionWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  font-size: 17px;
+  font-weight: 500;
+  text-transform: none;
+  color: #8e8e8f;
+  padding: 0 20px 6px;
+  margin: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  background: var(--section-bg-color);
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+/* Section Item */
+.sectionItem {
+  background: var(--section-bg-color);
+  padding: 12px 18px;
+  min-height: 56px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 17px;
+  font-weight: 400;
+  position: relative;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.sectionItem:first-of-type {
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+}
+
+.sectionItem:last-of-type {
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+}
+
+.sectionItem.withDescription {
+  min-height: 72px;
+}
+
+.sectionItem + .sectionItem::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 68px;
+  right: 20px;
+  border-top: 0.5px solid var(--separator-color);
+  opacity: 0.6;
+}
+
+.sectionItem + .sectionItem {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+button.sectionItem:active {
+  background: var(--background);
+}
+
+/* Icon */
+.icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.withDescription .icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+/* Body */
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.body .title {
+  line-height: 1.3;
+  font-weight: 400;
+}
+
+.body .description {
+  color: #8a8a8e;
+  margin-top: 4px;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+/* Right */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.value {
+  color: #8a8a8e;
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.chevron {
+  color: #59595e;
+  line-height: 0;
+  margin-right: -4px;
+}
+
+/* Danger */
+.danger {
+  color: var(--danger-color);
+}
+
+.danger .icon {
+  color: inherit;
+}

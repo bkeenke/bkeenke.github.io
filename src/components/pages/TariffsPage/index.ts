@@ -1,0 +1,1 @@
+export { TariffsPage, default } from './TariffsPage';

@@ -1,0 +1,118 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border-radius: 12px;
+  margin: 0;
+  background: var(--button-color);
+  color: var(--button-text-color);
+  font-size: 17px;
+  font-family: var(--font-family);
+  font-weight: 500;
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* Variants */
+.secondary {
+  background: var(--background-secondary);
+}
+
+.transparent {
+  background: transparent;
+}
+
+.glow {
+  background: hsla(0, 0%, 100%, 0.1);
+  color: var(--button-text-color);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}
+
+.glow .text {
+  position: relative;
+  z-index: 1;
+}
+
+.glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(90deg, transparent, transparent 40%, rgba(255, 255, 255, 0.5) 50%, transparent 60%, transparent) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  background-size: 300% 100%;
+  background-position: 200% 0;
+  animation: borderMove 5s linear infinite;
+  pointer-events: none;
+}
+
+/* Text */
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  margin: 0;
+  font-weight: 500;
+  width: 100%;
+}
+
+.loading .text {
+  opacity: 0.5;
+}
+
+/* Loader */
+.loader {
+  position: absolute;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid currentColor;
+  border-bottom: 2px solid transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes borderMove {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
