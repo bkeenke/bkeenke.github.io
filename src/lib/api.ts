@@ -6,7 +6,11 @@ import type { User, Service, ServiceOrder, PaySystem, AuthResponse } from '@/typ
 export const authApi = {
   // Telegram WebApp auth
   telegramAuth: async (initData: string): Promise<AuthResponse> => {
-    return apiClient.get<AuthResponse>(`/telegram/webapp/auth?profile=${PROFILE}&initData=${encodeURIComponent(initData)}`);
+    const params = new URLSearchParams({
+      profile: PROFILE,
+      initData: initData,
+    });
+    return apiClient.get<AuthResponse>(`/telegram/webapp/auth?${params.toString()}`);
   },
 
   // Login/password auth

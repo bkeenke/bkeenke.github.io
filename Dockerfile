@@ -12,9 +12,12 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build argument for API URL
+# Build arguments
 ARG NEXT_PUBLIC_API_BASE_URL=/shm/v1
+ARG NEXT_PUBLIC_BOT_PROFILE=telegram_bot
+
 ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
+ENV NEXT_PUBLIC_BOT_PROFILE=$NEXT_PUBLIC_BOT_PROFILE
 
 # Build the application
 RUN npm run build
