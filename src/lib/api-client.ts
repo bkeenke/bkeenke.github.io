@@ -5,37 +5,50 @@ interface RequestOptions extends RequestInit {
   timeout?: number;
 }
 
+const SESSION_STORAGE_KEY = 'shm_session_id';
+
 class ApiClient {
   private baseUrl: string;
   private sessionId: string | null = null;
 
   constructor(baseUrl: string = API_BASE_URL) {
     this.baseUrl = baseUrl;
+    // Try to restore session from storage on init
+    if (typeof window !== 'undefined') {
+      this.sessionId = localStorage.getItem(SESSION_STORAGE_KEY);
+    }
   }
 
   setSessionId(sessionId: string | null) {
     this.sessionId = sessionId;
-    if (sessionId) {
-      // Set cookie for subsequent requests
-      document.cookie = `${SESSION_COOKIE_NAME}=${sessionId}; path=/; SameSite=Strict`;
-    } else {
-      // Clear cookie
-      document.cookie = `${SESSION_COOKIE_NAME}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    if (typeof window !== 'undefined') {
+      if (sessionId) {
+        // Store in localStorage - works in all Telegram clients
+        localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
+      } else {
+        localStorage.removeItem(SESSION_STORAGE_KEY);
+      }
     }
   }
 
   getSessionId(): string | null {
     if (this.sessionId) return this.sessionId;
     
-    // Try to get from cookie
-    if (typeof document !== 'undefined') {
-      const match = document.cookie.match(new RegExp(`(^| )${SESSION_COOKIE_NAME}=([^;]+)`));
-      if (match) {
-        this.sessionId = match[2];
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(SESSION_STORAGE_KEY);
+      if (stored) {
+        this.sessionId = stored;
         return this.sessionId;
       }
     }
     return null;
+  }
+
+  clearSession() {
+    this.sessionId = null;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+    }
   }
 
   private async request<T>(
@@ -49,10 +62,10 @@ class ApiClient {
       ...fetchOptions.headers,
     };
 
-    // Add session cookie if available
+    // Add session ID as Authorization header (works in all contexts)
     const sessionId = this.getSessionId();
     if (sessionId) {
-      (headers as Record<string, string>)['Cookie'] = `${SESSION_COOKIE_NAME}=${sessionId}`;
+      (headers as Record<string, string>)['session-id'] = sessionId;
     }
 
     const controller = new AbortController();
@@ -63,7 +76,8 @@ class ApiClient {
         ...fetchOptions,
         headers,
         signal: controller.signal,
-        credentials: 'include',
+        // Use 'same-origin' in Telegram WebApp to avoid CORS issues
+        credentials: 'same-origin',
       });
 
       clearTimeout(timeoutId);
