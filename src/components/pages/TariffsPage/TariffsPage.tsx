@@ -1,30 +1,38 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { servicesApi } from '@/lib/api';
+import { servicesApi, paymentApi } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, Button, Loading, PaymentModal, useToast } from '@/components';
-import type { ServiceOrder } from '@/types';
+import { Card, Button, Loading, useToast } from '@/components';
+import type { ServiceOrder, Forecast } from '@/types';
 import styles from './TariffsPage.module.css';
 
-export function TariffsPage() {
+interface TariffsPageProps {
+  onTopUp?: (amount?: number) => void;
+}
+
+export function TariffsPage({ onTopUp }: TariffsPageProps) {
   const [services, setServices] = useState<ServiceOrder[]>([]);
+  const [forecast, setForecast] = useState<Forecast | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedService, setSelectedService] = useState<ServiceOrder | null>(null);
   const [orderingId, setOrderingId] = useState<number | null>(null);
   const { showToast } = useToast();
   const { user, refreshUser } = useAuth();
 
   useEffect(() => {
-    loadServices();
+    loadData();
   }, []);
 
-  const loadServices = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
-      const data = await servicesApi.getAvailableServices();
-      setServices(data);
+      const [servicesData, forecastData] = await Promise.all([
+        servicesApi.getAvailableServices(),
+        paymentApi.getForecast(),
+      ]);
+      setServices(servicesData);
+      setForecast(forecastData);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Ошибка загрузки тарифов');
@@ -33,7 +41,17 @@ export function TariffsPage() {
     }
   };
 
+  // Check if there are unpaid services
+  const hasDebt = forecast && forecast.items.some(item => item.status === 'NOT PAID');
+  const debtAmount = forecast ? Math.ceil(forecast.total - forecast.balance - forecast.bonuses) : 0;
+
   const handleSelectService = async (service: ServiceOrder) => {
+    // If has debt, redirect to payment page instead of ordering
+    if (hasDebt && debtAmount > 0) {
+      onTopUp?.(debtAmount);
+      return;
+    }
+
     const balance = user?.balance || 0;
     
     try {
@@ -46,23 +64,17 @@ export function TariffsPage() {
         // Достаточно денег - услуга оплачена автоматически
         showToast('Услуга успешно подключена!', 'success');
         await refreshUser();
-        await loadServices();
+        await loadData();
       } else {
-        // Недостаточно денег - услуга в статусе not paid, открываем оплату
-        setSelectedService(service);
+        // Недостаточно денег - открываем страницу пополнения с нужной суммой
+        const requiredAmount = Math.ceil(service.cost - balance);
+        onTopUp?.(requiredAmount);
       }
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Ошибка заказа', 'error');
     } finally {
       setOrderingId(null);
     }
-  };
-
-  const handlePaymentSuccess = () => {
-    setSelectedService(null);
-    showToast('Оплата прошла успешно!', 'success');
-    refreshUser();
-    loadServices();
   };
 
   // Group services by category
@@ -83,16 +95,23 @@ export function TariffsPage() {
     return (
       <div className={styles.error}>
         <p>{error}</p>
-        <Button onClick={loadServices}>Повторить</Button>
+        <Button onClick={loadData}>Повторить</Button>
       </div>
     );
   }
 
   return (
     <div className={styles.container}>
+      {hasDebt && debtAmount > 0 && (
+        <div className={styles.debtBanner}>
+          <p>У вас есть неоплаченные услуги</p>
+          <Button onClick={() => onTopUp?.(debtAmount)}>
+            Оплатить {debtAmount} ₽
+          </Button>
+        </div>
+      )}
       <div className={styles.header}>
         <h1 className={styles.title}>Тарифы</h1>
-        <p className={styles.subtitle}>Выберите подходящий тариф</p>
         {user?.balance !== undefined && (
           <p className={styles.balance}>Баланс: {user.balance} ₽</p>
         )}
@@ -100,7 +119,6 @@ export function TariffsPage() {
 
       {Object.entries(groupedServices).map(([category, categoryServices]) => (
         <div key={category} className={styles.category}>
-          <h2 className={styles.categoryTitle}>{category}</h2>
           <div className={styles.grid}>
             {categoryServices.map((service) => {
               const canAfford = (user?.balance || 0) >= service.cost;
@@ -137,14 +155,6 @@ export function TariffsPage() {
         <div className={styles.empty}>
           <p>Нет доступных тарифов</p>
         </div>
-      )}
-
-      {selectedService && (
-        <PaymentModal
-          service={selectedService}
-          onClose={() => setSelectedService(null)}
-          onSuccess={handlePaymentSuccess}
-        />
       )}
     </div>
   );

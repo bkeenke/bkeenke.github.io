@@ -6,5 +6,7 @@ export const API_TIMEOUT = 30000;
 
 export const PROFILE = process.env.NEXT_PUBLIC_BOT_PROFILE || 'telegram_bot';
 
+export const PAYMENT_LINK_OUT = process.env.NEXT_PUBLIC_PAYMENT_LINK_OUT || 'false';
+
 // Session cookie name
 export const SESSION_COOKIE_NAME = 'session_id';

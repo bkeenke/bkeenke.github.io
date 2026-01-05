@@ -3,6 +3,25 @@
   padding-bottom: 100px;
 }
 
+.debtBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background: rgba(255, 159, 10, 0.15);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.debtBanner p {
+  margin: 0;
+  font-size: 14px;
+  color: #ff9f0a;
+  font-weight: 500;
+}
+
 .header {
   text-align: center;
   margin-bottom: 24px;

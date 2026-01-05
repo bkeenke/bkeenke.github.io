@@ -1,0 +1,140 @@
+.container {
+  padding: 0 16px 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.backButtonHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.backButtonHeader:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.statusCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+}
+
+.statusIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+}
+
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statusLabel {
+  font-size: 14px;
+  color: #8e8e93;
+}
+
+.statusValue {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  padding: 20px;
+  text-align: center;
+}
+
+.error p {
+  color: #ff3b30;
+  margin-bottom: 16px;
+}
+
+.backButton {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.blockedNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(202, 64, 64, 0.15);
+  border-radius: 12px;
+  color: #ca4040;
+}
+
+.blockedNotice svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.blockedNotice p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.deleteSection {
+  margin-top: 24px;
+}
+
+.deleteSection button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(202, 64, 64, 0.15);
+  color: #ca4040;
+  border: none;
+}
+
+.deleteSection button:hover {
+  background: rgba(202, 64, 64, 0.25);
+}

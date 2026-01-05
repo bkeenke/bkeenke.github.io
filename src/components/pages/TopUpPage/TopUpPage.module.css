@@ -1,0 +1,234 @@
+.container {
+  padding: 0 16px 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.backButton:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.titleCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+}
+
+.titleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: #fff;
+}
+
+.titleInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titleLabel {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.titleHint {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.errorNotice {
+  padding: 16px;
+  margin-bottom: 16px;
+  background: rgba(255, 59, 48, 0.15);
+  border-radius: 12px;
+  color: #ff3b30;
+}
+
+.errorNotice p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.debtNotice {
+  padding: 16px;
+  margin-bottom: 16px;
+  background: rgba(255, 159, 10, 0.15);
+  border-radius: 12px;
+  color: #ff9f0a;
+}
+
+.debtNotice p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.debtAmount {
+  font-size: 18px !important;
+  font-weight: 600;
+  margin-top: 8px !important;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px 4px;
+}
+
+.presetAmounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.presetButton {
+  padding: 14px 8px;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.presetButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.presetButton.selected {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #fff;
+}
+
+.customAmount {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.amountInput {
+  width: 100%;
+  padding: 16px 40px 16px 16px;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.amountInput:focus {
+  border-color: var(--accent-color);
+}
+
+.amountInput::placeholder {
+  color: var(--text-secondary);
+}
+
+.currency {
+  position: absolute;
+  right: 16px;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+.paySystemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.paySystemItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.paySystemItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.paySystemItem.selected {
+  border-color: var(--accent-color);
+  background: rgba(0, 122, 255, 0.1);
+}
+
+.radio {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s;
+}
+
+.paySystemItem.selected .radio {
+  border-color: var(--accent-color);
+}
+
+.radioInner {
+  width: 10px;
+  height: 10px;
+  background: var(--accent-color);
+  border-radius: 50%;
+}
+
+.paySystemName {
+  flex: 1;
+  text-align: left;
+}
+
+.footer {
+  padding-top: 8px;
+}

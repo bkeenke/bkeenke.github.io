@@ -1,21 +1,35 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Layers } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   TabBar,
   LoginForm,
   Loading,
+  HomePage,
   TariffsPage,
   SubscriptionsPage,
   ProfilePage,
+  ServicePage,
+  TopUpPage,
 } from '@/components';
 import type { TabType } from '@/types';
 import styles from './page.module.css';
 
 export default function Home() {
   const { isAuthenticated, isLoading, isTelegram, telegram } = useAuth();
-  const [activeTab, setActiveTab] = useState<TabType>('tariffs');
+  const [activeTab, setActiveTab] = useState<TabType>('home');
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
+  const [topUpAmount, setTopUpAmount] = useState<number | undefined>(undefined);
+
+  const handleTopUp = (amount?: number) => {
+    setTopUpAmount(amount);
+  };
+
+  const handleCloseTopUp = () => {
+    setTopUpAmount(undefined);
+  };
 
   // Telegram WebApp ready
   useEffect(() => {
@@ -48,11 +62,7 @@ export default function Home() {
       <div className={styles.container}>
         <div className={styles.loginWrapper}>
           <div className={styles.logo}>
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <Layers size={64} strokeWidth={1.5} />
           </div>
           <h1 className={styles.title}>BK Cloud</h1>
           <p className={styles.subtitle}>Войдите в аккаунт для продолжения</p>
@@ -66,12 +76,37 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        {activeTab === 'tariffs' && <TariffsPage />}
-        {activeTab === 'subscriptions' && <SubscriptionsPage />}
-        {activeTab === 'profile' && <ProfilePage />}
+        {topUpAmount !== undefined ? (
+          <TopUpPage onBack={handleCloseTopUp} initialAmount={topUpAmount} />
+        ) : selectedServiceId !== null ? (
+          <ServicePage 
+            serviceId={selectedServiceId} 
+            onBack={() => setSelectedServiceId(null)} 
+          />
+        ) : (
+          <>
+            {activeTab === 'home' && (
+              <HomePage 
+                onServiceSelect={setSelectedServiceId} 
+                onTopUp={() => handleTopUp(200)}
+              />
+            )}
+            {activeTab === 'tariffs' && (
+              <TariffsPage onTopUp={handleTopUp} />
+            )}
+            {activeTab === 'subscriptions' && (
+              <SubscriptionsPage onServiceSelect={setSelectedServiceId} />
+            )}
+            {activeTab === 'profile' && <ProfilePage />}
+          </>
+        )}
       </main>
       
-      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
+      <TabBar activeTab={activeTab} onTabChange={(tab) => {
+        setSelectedServiceId(null);
+        setTopUpAmount(undefined);
+        setActiveTab(tab);
+      }} />
     </div>
   );
 }

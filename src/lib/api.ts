@@ -1,6 +1,6 @@
 import apiClient from './api-client';
 import { PROFILE } from './config';
-import type { User, Service, ServiceOrder, PaySystem, AuthResponse } from '@/types';
+import type { User, Service, ServiceOrder, PaySystem, AuthResponse, Forecast } from '@/types';
 
 // Auth API
 export const authApi = {
@@ -34,7 +34,8 @@ export const authApi = {
 export const userApi = {
   // Get current user info
   getProfile: async (): Promise<User> => {
-    return apiClient.get<User>('/user');
+    const users = await apiClient.get<User[]>('/user');
+    return users[0];
   },
 
   // Register new user
@@ -72,12 +73,24 @@ export const servicesApi = {
 
   // Get specific user service
   getUserService: async (userServiceId: number): Promise<Service> => {
-    return apiClient.get<Service>(`/user/service/${userServiceId}`);
+    const services = await apiClient.get<Service[]>(`/user/service?user_service_id=${userServiceId}`);
+    return services[0];
+  },
+
+  // Delete user service
+  deleteUserService: async (userServiceId: number): Promise<void> => {
+    await apiClient.delete(`/user/service?user_service_id=${userServiceId}`);
   },
 };
 
 // Payment API
 export const paymentApi = {
+  // Get payment forecast (unpaid services)
+  getForecast: async (): Promise<Forecast> => {
+    const data = await apiClient.get<Forecast[]>('/user/pay/forecast');
+    return data[0];
+  },
+
   // Get available payment systems
   getPaySystems: async (): Promise<PaySystem[]> => {
     return apiClient.get<PaySystem[]>('/user/pay/paysystems');

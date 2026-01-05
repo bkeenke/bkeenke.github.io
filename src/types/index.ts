@@ -16,8 +16,8 @@ export interface User {
 export interface Service {
   user_service_id: number;
   service_id: number;
-  name: string;
-  status: number;
+  name?: string;
+  status: string;
   created?: string;
   expire?: string;
   next?: string;
@@ -25,6 +25,7 @@ export interface Service {
   discount?: number;
   qnt?: number;
   settings?: Record<string, unknown>;
+  service?: ServiceOrder;
 }
 
 export interface ServiceOrder {
@@ -38,8 +39,13 @@ export interface ServiceOrder {
 
 export interface PaySystem {
   id: number;
+  paysystem: string;
   name: string;
   category?: string;
+  shm_url: string;
+  amount?: number;
+  recurring?: string;
+  allow_deletion?: boolean;
 }
 
 export interface AuthResponse {
@@ -50,6 +56,38 @@ export interface AuthResponse {
 export interface ApiError {
   error: string;
   code?: number;
+}
+
+// Forecast types
+export interface ForecastItem {
+  user_service_id: string;
+  usi: string;
+  service_id: string;
+  name: string;
+  status: string;
+  cost: number;
+  total: number;
+  discount: number;
+  months: number;
+  qnt: number;
+  expire: string;
+  next?: {
+    service_id: number;
+    name: string;
+    cost: number;
+    total: number;
+    discount: number;
+    bonus: number;
+    months: number;
+    qnt: number;
+  };
+}
+
+export interface Forecast {
+  balance: number;
+  bonuses: number;
+  total: number;
+  items: ForecastItem[];
 }
 
 // Telegram WebApp types
@@ -86,6 +124,9 @@ export interface TelegramWebApp {
   ready: () => void;
   expand: () => void;
   close: () => void;
+  openLink: (url: string, options?: { try_instant_view?: boolean }) => void;
+  showAlert: (message: string, callback?: () => void) => void;
+  showConfirm: (message: string, callback: (confirmed: boolean) => void) => void;
   setHeaderColor: (color: string) => void;
   setBackgroundColor: (color: string) => void;
   MainButton: {
@@ -137,4 +178,4 @@ export interface AuthState {
   error: string | null;
 }
 
-export type TabType = 'tariffs' | 'subscriptions' | 'profile';
+export type TabType = 'home' | 'tariffs' | 'subscriptions' | 'profile';
