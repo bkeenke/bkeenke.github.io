@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, X } from 'lucide-react';
 import { paymentApi, servicesApi } from '@/lib/api';
 import { PAYMENT_LINK_OUT } from '@/lib/config';
 import { Button, Loading } from '@/components';
@@ -25,6 +25,7 @@ export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPagePr
   const [amount, setAmount] = useState<number>(initialAmount || 0);
   const [customAmount, setCustomAmount] = useState<string>(initialAmount ? String(initialAmount) : '');
   const [error, setError] = useState<string | null>(null);
+  const [paymentIframeUrl, setPaymentIframeUrl] = useState<string | null>(null);
 
   useEffect(() => {
     loadData();
@@ -101,47 +102,49 @@ export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPagePr
 
     const paymentUrl = paySystem.shm_url + amount;
     
-    // If PAYMENT_LINK_OUT is false, fetch redirect URL and navigate in current window
+    // If PAYMENT_LINK_OUT is false, open in iframe
     if (PAYMENT_LINK_OUT === 'false') {
-      try {
-        // Fetch the payment URL - backend will return redirect
-        const response = await fetch(paymentUrl, {
-          method: 'GET',
-          redirect: 'manual', // Don't follow redirects automatically
-        });
-        
-        // Get redirect URL from Location header or response
-        const redirectUrl = response.headers.get('Location');
-        
-        if (redirectUrl) {
-          window.location.href = redirectUrl;
-        } else {
-          // If no redirect header, try to get URL from response body
-          const data = await response.json().catch(() => null);
-          if (data?.url || data?.redirect_url) {
-            window.location.href = data.url || data.redirect_url;
-          } else {
-            // Fallback: just navigate to the payment URL
-            window.location.href = paymentUrl;
-          }
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Ошибка оплаты');
-        setProcessing(false);
-      }
+      setPaymentIframeUrl(paymentUrl);
+      setProcessing(false);
     } else {
       // Open in external browser via Telegram WebApp
       if (window.Telegram?.WebApp?.openLink) {
         window.Telegram.WebApp.openLink(paymentUrl, { try_instant_view: false });
-        window.Telegram.WebApp.close();
       } else {
         window.open(paymentUrl, '_blank');
       }
+      setProcessing(false);
     }
+  };
+
+  const handleCloseIframe = () => {
+    setPaymentIframeUrl(null);
+    // Reload data to check if payment was successful
+    loadData();
   };
 
   if (loading) {
     return <Loading text="Загрузка..." />;
+  }
+
+  // Show payment iframe
+  if (paymentIframeUrl) {
+    return (
+      <div className={styles.iframeContainer}>
+        <div className={styles.iframeHeader}>
+          <button className={styles.closeButton} onClick={handleCloseIframe}>
+            <X size={24} />
+          </button>
+          <span className={styles.iframeTitle}>Оплата</span>
+        </div>
+        <iframe
+          src={paymentIframeUrl}
+          className={styles.paymentIframe}
+          title="Оплата"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"
+        />
+      </div>
+    );
   }
 
   // Show preset amounts only if no debt and no initial amount
