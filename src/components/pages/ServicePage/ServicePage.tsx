@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { ChevronLeft, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 import { servicesApi } from '@/lib/api';
 import { Section, SectionItem, Loading, Button, useConfirmDialog } from '@/components';
+import { useTelegramBackButton } from '@/hooks';
 import type { Service } from '@/types';
 import styles from './ServicePage.module.css';
 
@@ -54,6 +55,10 @@ export function ServicePage({ serviceId, onBack }: ServicePageProps) {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { confirm, DialogComponent } = useConfirmDialog();
+  
+  // Use Telegram BackButton if available
+  const handleBack = useCallback(() => onBack(), [onBack]);
+  const isTelegram = useTelegramBackButton(handleBack);
 
   useEffect(() => {
     loadService();
@@ -117,11 +122,13 @@ export function ServicePage({ serviceId, onBack }: ServicePageProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <button className={styles.backButtonHeader} onClick={onBack}>
-          <ChevronLeft size={24} color="#ffffff" />
-        </button>
-      </div>
+      {!isTelegram && (
+        <div className={styles.header}>
+          <button className={styles.backButtonHeader} onClick={onBack}>
+            <ChevronLeft size={24} color="#ffffff" />
+          </button>
+        </div>
+      )}
 
       <div className={styles.statusCard}>
         <div className={styles.statusIcon} style={{ backgroundColor: getStatusColor(service.status) }}>

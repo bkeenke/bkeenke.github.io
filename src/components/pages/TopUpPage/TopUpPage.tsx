@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, X } from 'lucide-react';
 import { paymentApi, servicesApi } from '@/lib/api';
 import { PAYMENT_LINK_OUT } from '@/lib/config';
 import { Button, Loading } from '@/components';
+import { useTelegramBackButton } from '@/hooks';
 import type { PaySystem, Forecast } from '@/types';
 import styles from './TopUpPage.module.css';
 
@@ -26,6 +27,10 @@ export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPagePr
   const [customAmount, setCustomAmount] = useState<string>(initialAmount ? String(initialAmount) : '');
   const [error, setError] = useState<string | null>(null);
   const [paymentIframeUrl, setPaymentIframeUrl] = useState<string | null>(null);
+  
+  // Use Telegram BackButton if available
+  const handleBack = useCallback(() => onBack(), [onBack]);
+  const isTelegram = useTelegramBackButton(handleBack);
 
   useEffect(() => {
     loadData();
@@ -152,11 +157,13 @@ export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPagePr
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <button className={styles.backButton} onClick={onBack}>
-          <ChevronLeft size={24} color="#ffffff" />
-        </button>
-      </div>
+      {!isTelegram && (
+        <div className={styles.header}>
+          <button className={styles.backButton} onClick={onBack}>
+            <ChevronLeft size={24} color="#ffffff" />
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className={styles.errorNotice}>
