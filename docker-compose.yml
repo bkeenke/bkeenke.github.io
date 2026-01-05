@@ -1,12 +1,13 @@
 services:
   webapp:
-    build:
-      context: .
-      args:
-        - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL:-/shm/v1}
-    container_name: bkcloud-webapp
+    image: bkeenke/webapp:latest
+    container_name: webapp
     restart: unless-stopped
-    ports:
-      - "3000:3000"
+    networks:
+      - caddy
     environment:
       - NODE_ENV=production
+
+networks:
+  caddy:
+    external: true
