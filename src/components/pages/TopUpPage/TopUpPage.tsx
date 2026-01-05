@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft } from 'lucide-react';
-import { paymentApi } from '@/lib/api';
+import { paymentApi, servicesApi } from '@/lib/api';
 import { PAYMENT_LINK_OUT } from '@/lib/config';
 import { Button, Loading } from '@/components';
 import type { PaySystem, Forecast } from '@/types';
@@ -11,11 +11,12 @@ import styles from './TopUpPage.module.css';
 interface TopUpPageProps {
   onBack: () => void;
   initialAmount?: number;
+  serviceToOrder?: number;
 }
 
 const PRESET_AMOUNTS = [100, 200, 500, 1000];
 
-export function TopUpPage({ onBack, initialAmount }: TopUpPageProps) {
+export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPageProps) {
   const [paySystems, setPaySystems] = useState<PaySystem[]>([]);
   const [forecast, setForecast] = useState<Forecast | null>(null);
   const [loading, setLoading] = useState(true);
@@ -84,14 +85,25 @@ export function TopUpPage({ onBack, initialAmount }: TopUpPageProps) {
       return;
     }
 
+    setProcessing(true);
+    setError(null);
+
+    // Order service before payment if serviceToOrder is specified
+    if (serviceToOrder) {
+      try {
+        await servicesApi.orderService(serviceToOrder);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Ошибка заказа услуги');
+        setProcessing(false);
+        return;
+      }
+    }
+
     const paymentUrl = paySystem.shm_url + amount;
     
     // If PAYMENT_LINK_OUT is false, fetch redirect URL and navigate in current window
     if (PAYMENT_LINK_OUT === 'false') {
       try {
-        setProcessing(true);
-        setError(null);
-        
         // Fetch the payment URL - backend will return redirect
         const response = await fetch(paymentUrl, {
           method: 'GET',

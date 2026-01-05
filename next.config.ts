@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  // Proxy API requests in development
+  async rewrites() {
+    // Disable rewrites for static export
+    if (isStatic) {
+      return [];
+    }
+    return [
+      {
+        source: '/shm/:path*',
+        destination: 'https://shm-api.bkcloud.ru/shm/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

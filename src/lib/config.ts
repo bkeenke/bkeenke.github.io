@@ -8,5 +8,7 @@ export const PROFILE = process.env.NEXT_PUBLIC_BOT_PROFILE || 'telegram_bot';
 
 export const PAYMENT_LINK_OUT = process.env.NEXT_PUBLIC_PAYMENT_LINK_OUT || 'false';
 
+export const SUPPORT_URL = process.env.NEXT_PUBLIC_SUPPORT_URL || '';
+
 // Session cookie name
 export const SESSION_COOKIE_NAME = 'session_id';

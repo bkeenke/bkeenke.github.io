@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import { User, UserCircle, Wallet, Phone, Send } from 'lucide-react';
+import { User, BadgeQuestionMark, CircleQuestionMark } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Section, SectionItem, Button, Loading } from '@/components';
+import { Section, SectionItem, Loading } from '@/components';
 import styles from './ProfilePage.module.css';
+import { SUPPORT_URL } from '@/lib/config';
 
 export function ProfilePage() {
   const { user, isLoading, logout, isTelegram } = useAuth();
@@ -25,43 +26,53 @@ export function ProfilePage() {
     await logout();
   };
 
+  // Get Telegram user photo if available
+  const telegramPhotoUrl = isTelegram 
+    ? window.Telegram?.WebApp?.initDataUnsafe?.user?.photo_url 
+    : null;
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.avatar}>
-          {user.full_name?.charAt(0).toUpperCase() || user.login?.charAt(0).toUpperCase() || '?'}
+          {telegramPhotoUrl ? (
+            <img 
+              src={telegramPhotoUrl} 
+              alt="Avatar" 
+              className={styles.avatarImage}
+            />
+          ) : (
+            user.full_name?.charAt(0).toUpperCase() || user.login?.charAt(0).toUpperCase() || '?'
+          )}
         </div>
-        <h1 className={styles.name}>{user.full_name || user.login}</h1>
-        {user.login && user.full_name && (
-          <p className={styles.login}>@{user.login}</p>
-        )}
+        <h1 className={styles.name}>{user.login}</h1>
       </div>
 
-      <Section title="Информация">
+      <Section>
         <SectionItem
-          title="Логин"
-          value={user.login || '—'}
+          title="Мой профиль"
+          showChevron
           icon={<User size={20} />}
+          iconColor="#ff3c00ff"
+        />
+      </Section>
+      <br/>
+      <Section>
+        <SectionItem
+          title="FAQ"
+          showChevron
+          icon={<CircleQuestionMark size={20} />}
           iconColor="#007aff"
         />
-        {user.full_name && (
-          <SectionItem
-            title="Полное имя"
-            value={user.full_name}
-            icon={<UserCircle size={20} />}
-            iconColor="#34c759"
-          />
-        )}
-        {user.balance !== undefined && (
-          <SectionItem
-            title="Баланс"
-            value={`${user.balance.toFixed(2)} ₽`}
-            icon={<Wallet size={20} />}
-            iconColor="#ff9500"
-          />
-        )}
+        { SUPPORT_URL && (
+        <SectionItem
+          title="Поддержка"
+          showChevron
+          icon={<BadgeQuestionMark size={20} />}
+          iconColor="#007aff"
+        /> )}
       </Section>
-      
+
       {/* <div className={styles.actions}>
         <Button variant="transparent" onClick={handleLogout} fullWidth>
           Выйти из аккаунта

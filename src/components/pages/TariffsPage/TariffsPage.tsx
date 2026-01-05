@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { servicesApi, paymentApi } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, Button, Loading, useToast } from '@/components';
+import { Card, Button, Loading, useToast, useConfirmDialog } from '@/components';
 import type { ServiceOrder, Forecast } from '@/types';
 import styles from './TariffsPage.module.css';
 
 interface TariffsPageProps {
-  onTopUp?: (amount?: number) => void;
+  onTopUp?: (amount?: number, serviceToOrder?: number) => void;
 }
 
 export function TariffsPage({ onTopUp }: TariffsPageProps) {
@@ -19,6 +19,7 @@ export function TariffsPage({ onTopUp }: TariffsPageProps) {
   const [orderingId, setOrderingId] = useState<number | null>(null);
   const { showToast } = useToast();
   const { user, refreshUser } = useAuth();
+  const { confirm, DialogComponent } = useConfirmDialog();
 
   useEffect(() => {
     loadData();
@@ -54,38 +55,48 @@ export function TariffsPage({ onTopUp }: TariffsPageProps) {
 
     const balance = user?.balance || 0;
     
-    try {
-      setOrderingId(service.service_id);
+    if (balance >= service.cost) {
+      // Достаточно денег - спрашиваем подтверждение
+      const confirmed = await confirm({
+        type: 'info',
+        title: 'Подключить услугу?',
+        message: `С вашего баланса будет списано ${service.cost} ₽`,
+        confirmText: 'Подключить',
+        cancelText: 'Отмена',
+      });
       
-      // Всегда сначала регистрируем услугу
-      await servicesApi.orderService(service.service_id);
+      if (!confirmed) return;
       
-      if (balance >= service.cost) {
-        // Достаточно денег - услуга оплачена автоматически
+      try {
+        setOrderingId(service.service_id);
+        await servicesApi.orderService(service.service_id);
         showToast('Услуга успешно подключена!', 'success');
         await refreshUser();
         await loadData();
-      } else {
-        // Недостаточно денег - открываем страницу пополнения с нужной суммой
-        const requiredAmount = Math.ceil(service.cost - balance);
-        onTopUp?.(requiredAmount);
+      } catch (err) {
+        showToast(err instanceof Error ? err.message : 'Ошибка заказа', 'error');
+      } finally {
+        setOrderingId(null);
       }
-    } catch (err) {
-      showToast(err instanceof Error ? err.message : 'Ошибка заказа', 'error');
-    } finally {
-      setOrderingId(null);
+    } else {
+      // Недостаточно денег - открываем страницу пополнения с ID услуги для заказа после оплаты
+      const requiredAmount = Math.ceil(service.cost - balance);
+      onTopUp?.(requiredAmount, service.service_id);
     }
   };
 
-  // Group services by category
-  const groupedServices = services.reduce((acc, service) => {
-    const category = service.category || 'Другое';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(service);
-    return acc;
-  }, {} as Record<string, ServiceOrder[]>);
+  // Group services by category and sort by cost
+  const groupedServices = services
+    .slice()
+    .sort((a, b) => a.cost - b.cost)
+    .reduce((acc, service) => {
+      const category = service.category || 'Другое';
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(service);
+      return acc;
+    }, {} as Record<string, ServiceOrder[]>);
 
   if (loading) {
     return <Loading text="Загрузка тарифов..." />;
@@ -156,6 +167,8 @@ export function TariffsPage({ onTopUp }: TariffsPageProps) {
           <p>Нет доступных тарифов</p>
         </div>
       )}
+      
+      {DialogComponent}
     </div>
   );
 }

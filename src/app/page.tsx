@@ -22,13 +22,16 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
   const [topUpAmount, setTopUpAmount] = useState<number | undefined>(undefined);
+  const [serviceToOrder, setServiceToOrder] = useState<number | undefined>(undefined);
 
-  const handleTopUp = (amount?: number) => {
+  const handleTopUp = (amount?: number, serviceId?: number) => {
     setTopUpAmount(amount);
+    setServiceToOrder(serviceId);
   };
 
   const handleCloseTopUp = () => {
     setTopUpAmount(undefined);
+    setServiceToOrder(undefined);
   };
 
   // Telegram WebApp ready
@@ -77,7 +80,11 @@ export default function Home() {
     <div className={styles.container}>
       <main className={styles.main}>
         {topUpAmount !== undefined ? (
-          <TopUpPage onBack={handleCloseTopUp} initialAmount={topUpAmount} />
+          <TopUpPage 
+            onBack={handleCloseTopUp} 
+            initialAmount={topUpAmount} 
+            serviceToOrder={serviceToOrder}
+          />
         ) : selectedServiceId !== null ? (
           <ServicePage 
             serviceId={selectedServiceId} 
