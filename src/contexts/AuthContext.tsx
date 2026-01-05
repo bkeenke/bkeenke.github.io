@@ -54,7 +54,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           // Auth via Telegram
           const authResponse = await authApi.telegramAuth(tg.initData);
-          console.log('Telegram auth response:', authResponse);
           
           const sessionId = authResponse.session_id || authResponse.id;
           if (!sessionId) {
@@ -62,7 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
           
           apiClient.setSessionId(sessionId);
-          console.log('Session ID set:', sessionId);
           
           // Get user profile
           const user = await userApi.getProfile();
@@ -76,7 +74,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             error: null,
           });
         } catch (error) {
-          console.error('Telegram auth error:', error);
           setState({
             ...initialState,
             isLoading: false,
@@ -201,7 +198,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const user = await userApi.getProfile();
       setState(prev => ({ ...prev, user }));
     } catch (error) {
-      console.error('Failed to refresh user:', error);
     }
   }, [state.isAuthenticated]);
 
