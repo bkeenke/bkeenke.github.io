@@ -21,6 +21,13 @@
   margin: 0;
 }
 
+.balance {
+  font-size: 14px;
+  color: var(--accent-color);
+  margin: 8px 0 0;
+  font-weight: 600;
+}
+
 .category {
   margin-bottom: 24px;
 }

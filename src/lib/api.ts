@@ -1,11 +1,12 @@
 import apiClient from './api-client';
+import { PROFILE } from './config';
 import type { User, Service, ServiceOrder, PaySystem, AuthResponse } from '@/types';
 
 // Auth API
 export const authApi = {
   // Telegram WebApp auth
   telegramAuth: async (initData: string): Promise<AuthResponse> => {
-    return apiClient.get<AuthResponse>(`/telegram/webapp/auth?initData=${encodeURIComponent(initData)}`);
+    return apiClient.get<AuthResponse>(`/telegram/webapp/auth?profile=${PROFILE}&initData=${encodeURIComponent(initData)}`);
   },
 
   // Login/password auth

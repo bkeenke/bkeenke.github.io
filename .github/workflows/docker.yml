@@ -48,5 +48,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             NEXT_PUBLIC_API_BASE_URL=${{ secrets.API_BASE_URL }}
+            NEXT_PUBLIC_BOT_PROFILE=${{ secrets.BOT_PROFILE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
