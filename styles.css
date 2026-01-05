@@ -1,99 +1,163 @@
-/* Telegram-like styles */
 :root {
-    --tg-theme-bg-color: #ffffff;
-    --tg-theme-text-color: #000000;
-    --tg-theme-hint-color: #999999;
-    --tg-theme-link-color: #2481cc;
-    --tg-theme-button-color: #2481cc;
-    --tg-theme-button-text-color: #ffffff;
-    --tg-theme-secondary-bg-color: #f4f4f5;
+    --bg-color: #212121;
+    --secondary-bg-color: #181818;
+    --text-color: #ffffff;
+    --hint-color: #aaaaaa;
+    --link-color: #8774e1;
+    --button-color: #8774e1;
+    --button-text-color: #ffffff;
+    --section-bg: #212121;
+    --destructive-color: #ff595a;
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background-color: var(--tg-theme-bg-color);
-    color: var(--tg-theme-text-color);
-    min-height: 100vh;
-    overflow-x: hidden;
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
 }
 
 .app {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100%;
     max-width: 100%;
 }
 
-/* Основной контент */
 .content {
     flex: 1;
-    padding: 16px;
-    padding-bottom: 80px;
     overflow-y: auto;
+    padding-bottom: 80px;
 }
 
 .page {
-    display: none;
-    animation: fadeIn 0.2s ease-in-out;
-}
-
-.page.active {
-    display: block;
+    animation: fadeIn 0.2s ease;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.page-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: var(--tg-theme-text-color);
-}
-
-.page-subtitle {
-    font-size: 14px;
-    color: var(--tg-theme-hint-color);
-    margin-bottom: 24px;
-}
-
-/* Пустое состояние */
-.empty-state {
+/* Profile Header */
+.profile-header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 32px 16px 24px;
+    background-color: var(--secondary-bg-color);
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8774e1, #e774c3);
+    display: flex;
+    align-items: center;
     justify-content: center;
-    min-height: 300px;
-    text-align: center;
-    color: var(--tg-theme-hint-color);
-}
-
-.empty-state-icon {
-    width: 80px;
-    height: 80px;
     margin-bottom: 16px;
-    opacity: 0.5;
+    font-size: 42px;
+    font-weight: 500;
+    color: white;
+    overflow: hidden;
 }
 
-.empty-state-text {
-    font-size: 16px;
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* Нижняя навигация */
+.profile-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* Menu Cards */
+.menu-section {
+    padding: 8px 16px;
+}
+
+.menu-card {
+    background-color: var(--section-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.menu-item:active {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.menu-item:not(:last-child) {
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+}
+
+.menu-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.menu-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+}
+
+.menu-icon.red { background-color: #ff3b30; }
+.menu-icon.orange { background-color: #ff9500; }
+.menu-icon.green { background-color: #30d158; }
+.menu-icon.cyan { background-color: #32ade6; }
+.menu-icon.blue { background-color: #007aff; }
+.menu-icon.purple { background-color: #8774e1; }
+.menu-icon.pink { background-color: #ff2d92; }
+.menu-icon.gray { background-color: #8e8e93; }
+
+.menu-text {
+    flex: 1;
+    font-size: 17px;
+    color: var(--text-color);
+}
+
+.menu-arrow {
+    color: var(--hint-color);
+    opacity: 0.4;
+}
+
+.menu-arrow svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Bottom Navigation */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -102,10 +166,9 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: var(--tg-theme-bg-color);
-    border-top: 1px solid var(--tg-theme-secondary-bg-color);
-    padding: 8px 0;
-    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    background-color: var(--secondary-bg-color);
+    padding: 6px 0;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
     z-index: 1000;
 }
 
@@ -113,28 +176,36 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     background: none;
     border: none;
-    padding: 8px 16px;
+    padding: 6px 24px;
     cursor: pointer;
-    color: var(--tg-theme-hint-color);
-    transition: color 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
+    color: var(--hint-color);
+    transition: color 0.2s;
 }
 
 .nav-item.active {
-    color: var(--tg-theme-button-color);
+    color: var(--text-color);
 }
 
-.nav-item:active {
-    opacity: 0.7;
+.nav-icon-wrapper {
+    width: 56px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    margin-bottom: 4px;
+    transition: background-color 0.2s;
+}
+
+.nav-item.active .nav-icon-wrapper {
+    background-color: rgba(135, 116, 225, 0.2);
 }
 
 .nav-icon {
-    width: 24px;
-    height: 24px;
-    margin-bottom: 4px;
+    width: 26px;
+    height: 26px;
 }
 
 .nav-item span {
@@ -142,38 +213,119 @@ body {
     font-weight: 500;
 }
 
-/* Карточки */
-.card {
-    background-color: var(--tg-theme-secondary-bg-color);
-    border-radius: 12px;
-    padding: 16px;
+.nav-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8774e1, #e774c3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    overflow: hidden;
+}
+
+.nav-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Page Title */
+.page-header {
+    padding: 20px 16px 12px;
+    background-color: var(--secondary-bg-color);
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.page-subtitle {
+    font-size: 15px;
+    color: var(--hint-color);
+    margin-top: 4px;
+}
+
+/* Tariff Cards */
+.tariff-card {
+    background-color: var(--section-bg);
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0 16px 12px;
+}
+
+.tariff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     margin-bottom: 12px;
 }
 
-.card-title {
-    font-size: 16px;
+.tariff-name {
+    font-size: 18px;
     font-weight: 600;
-    margin-bottom: 8px;
 }
 
-.card-text {
-    font-size: 14px;
-    color: var(--tg-theme-hint-color);
+.tariff-badge {
+    background-color: var(--button-color);
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
 }
 
-/* Кнопки */
+.tariff-price {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--button-color);
+    margin-bottom: 16px;
+}
+
+.tariff-price span {
+    font-size: 15px;
+    color: var(--hint-color);
+    font-weight: 400;
+}
+
+.tariff-features {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.tariff-features li {
+    font-size: 15px;
+    color: var(--hint-color);
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tariff-features li::before {
+    content: "✓";
+    color: #30d158;
+    font-weight: 600;
+    font-size: 16px;
+}
+
 .btn {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 15px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
     font-weight: 600;
     border: none;
     cursor: pointer;
-    transition: opacity 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.2s;
 }
 
 .btn:active {
@@ -181,42 +333,88 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--tg-theme-button-color);
-    color: var(--tg-theme-button-text-color);
+    background-color: var(--button-color);
+    color: var(--button-text-color);
 }
 
 .btn-secondary {
-    background-color: var(--tg-theme-secondary-bg-color);
-    color: var(--tg-theme-text-color);
+    background-color: rgba(135, 116, 225, 0.15);
+    color: var(--button-color);
 }
 
-/* Профиль */
-.profile-header {
+/* Empty State */
+.empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 0;
+    justify-content: center;
+    padding: 80px 40px;
+    text-align: center;
 }
 
-.profile-avatar {
+.empty-icon {
     width: 80px;
     height: 80px;
-    border-radius: 50%;
-    background-color: var(--tg-theme-button-color);
+    margin-bottom: 20px;
+    opacity: 0.3;
+    color: var(--hint-color);
+}
+
+.empty-text {
+    font-size: 17px;
+    color: var(--hint-color);
+}
+
+/* Subscription Card */
+.subscription-card {
+    background-color: var(--section-bg);
+    border-radius: 16px;
+    padding: 16px;
+    margin: 0 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.subscription-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #8774e1, #e774c3);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 12px;
-    font-size: 32px;
-    color: var(--tg-theme-button-text-color);
+    flex-shrink: 0;
 }
 
-.profile-name {
-    font-size: 20px;
+.subscription-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+}
+
+.subscription-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.subscription-name {
+    font-size: 17px;
     font-weight: 600;
+    margin-bottom: 4px;
 }
 
-.profile-username {
+.subscription-status {
     font-size: 14px;
-    color: var(--tg-theme-hint-color);
+    color: #30d158;
+}
+
+.subscription-status.expired {
+    color: var(--destructive-color);
+}
+
+.subscription-date {
+    font-size: 13px;
+    color: var(--hint-color);
+    margin-top: 2px;
 }
