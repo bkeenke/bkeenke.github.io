@@ -1,16 +1,14 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === 'production';
+const isStatic = process.env.STATIC_EXPORT === 'true';
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  // Use 'export' for GitHub Pages, 'standalone' for Docker
+  output: isStatic ? 'export' : 'standalone',
   trailingSlash: true,
   images: {
     unoptimized: true,
   },
-  // Uncomment if deploying to a subdirectory, e.g., /webapp
-  // basePath: isProd ? '/webapp' : '',
-  // assetPrefix: isProd ? '/webapp/' : '',
 };
 
 export default nextConfig;

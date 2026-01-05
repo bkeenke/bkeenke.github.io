@@ -35,6 +35,7 @@ jobs:
         run: npm run build
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          STATIC_EXPORT: 'true'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
