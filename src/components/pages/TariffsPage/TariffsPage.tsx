@@ -78,15 +78,15 @@ export function TariffsPage() {
               <Card key={service.service_id} className={styles.serviceCard}>
                 <div className={styles.serviceHeader}>
                   <h3 className={styles.serviceName}>{service.name}</h3>
-                  {service.description && (
-                    <p className={styles.serviceDescription}>{service.description}</p>
+                  {service.descr && (
+                    <p className={styles.serviceDescription}>{service.descr}</p>
                   )}
                 </div>
                 <div className={styles.servicePrice}>
                   <span className={styles.priceAmount}>{service.cost}</span>
                   <span className={styles.priceCurrency}>₽</span>
-                  {service.period_cost && (
-                    <span className={styles.period}>/ мес</span>
+                  {service.period && service.period > 0 && (
+                    <span className={styles.period}>/ {service.period} мес</span>
                   )}
                 </div>
                 <Button

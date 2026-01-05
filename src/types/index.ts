@@ -31,10 +31,9 @@ export interface ServiceOrder {
   service_id: number;
   name: string;
   cost: number;
-  period_cost?: number;
+  period?: number;
   category?: string;
-  description?: string;
-  config?: Record<string, unknown>;
+  descr?: string;  // description from API
 }
 
 export interface PaySystem {
@@ -44,7 +43,8 @@ export interface PaySystem {
 }
 
 export interface AuthResponse {
-  id: string;  // session_id from API
+  id?: string;         // from /user/auth
+  session_id?: string; // from /telegram/webapp/auth
 }
 
 export interface ApiError {

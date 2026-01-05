@@ -81,7 +81,15 @@ class ApiClient {
       const text = await response.text();
       if (!text) return {} as T;
       
-      return JSON.parse(text) as T;
+      const json = JSON.parse(text);
+      
+      // API returns wrapped response: { data: [...], items, limit, offset, status }
+      // Extract data array for GET requests
+      if (json && typeof json === 'object' && 'data' in json && Array.isArray(json.data)) {
+        return json.data as T;
+      }
+      
+      return json as T;
     } catch (error) {
       clearTimeout(timeoutId);
       

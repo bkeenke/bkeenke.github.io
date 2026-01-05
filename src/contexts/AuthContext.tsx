@@ -54,7 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           // Auth via Telegram
           const authResponse = await authApi.telegramAuth(tg.initData);
-          apiClient.setSessionId(authResponse.id);
+          const sessionId = authResponse.session_id!;
+          apiClient.setSessionId(sessionId);
           
           // Get user profile
           const user = await userApi.getProfile();
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isAuthenticated: true,
             isLoading: false,
             user,
-            sessionId: authResponse.id,
+            sessionId,
             isTelegram: true,
             error: null,
           });
@@ -124,7 +125,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     
     try {
       const authResponse = await authApi.login(username, password);
-      apiClient.setSessionId(authResponse.id);
+      const sessionId = authResponse.id!;
+      apiClient.setSessionId(sessionId);
       
       const user = await userApi.getProfile();
       
@@ -132,7 +134,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated: true,
         isLoading: false,
         user,
-        sessionId: authResponse.id,
+        sessionId,
         isTelegram: false,
         error: null,
       });

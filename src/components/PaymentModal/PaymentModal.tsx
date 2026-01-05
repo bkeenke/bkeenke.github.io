@@ -72,13 +72,13 @@ export function PaymentModal({ service, onClose, onSuccess }: PaymentModalProps)
         <div className={styles.content}>
           <div className={styles.serviceInfo}>
             <h3 className={styles.serviceName}>{service.name}</h3>
-            {service.description && (
-              <p className={styles.serviceDescription}>{service.description}</p>
+            {service.descr && (
+              <p className={styles.serviceDescription}>{service.descr}</p>
             )}
             <div className={styles.price}>
               <span className={styles.priceValue}>{service.cost} ₽</span>
-              {service.period_cost && (
-                <span className={styles.pricePeriod}>/ мес</span>
+              {service.period && service.period > 0 && (
+                <span className={styles.pricePeriod}>/ {service.period} мес</span>
               )}
             </div>
           </div>
