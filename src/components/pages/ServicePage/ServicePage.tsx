@@ -119,7 +119,7 @@ export function ServicePage({ serviceId, onBack }: ServicePageProps) {
     <div className={styles.container}>
       <div className={styles.header}>
         <button className={styles.backButtonHeader} onClick={onBack}>
-          <ChevronLeft size={24} />
+          <ChevronLeft size={24} color="#ffffff" />
         </button>
       </div>
 

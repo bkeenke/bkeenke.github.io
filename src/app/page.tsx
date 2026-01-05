@@ -64,11 +64,6 @@ export default function Home() {
     return (
       <div className={styles.container}>
         <div className={styles.loginWrapper}>
-          <div className={styles.logo}>
-            <Layers size={64} strokeWidth={1.5} />
-          </div>
-          <h1 className={styles.title}>BK Cloud</h1>
-          <p className={styles.subtitle}>Войдите в аккаунт для продолжения</p>
           <LoginForm />
         </div>
       </div>

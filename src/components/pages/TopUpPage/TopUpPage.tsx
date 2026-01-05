@@ -133,7 +133,7 @@ export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPagePr
       <div className={styles.iframeContainer}>
         <div className={styles.iframeHeader}>
           <button className={styles.closeButton} onClick={handleCloseIframe}>
-            <X size={24} />
+            <X size={24} color="#ffffff" />
           </button>
           <span className={styles.iframeTitle}>Оплата</span>
         </div>
@@ -154,7 +154,7 @@ export function TopUpPage({ onBack, initialAmount, serviceToOrder }: TopUpPagePr
     <div className={styles.container}>
       <div className={styles.header}>
         <button className={styles.backButton} onClick={onBack}>
-          <ChevronLeft size={24} />
+          <ChevronLeft size={24} color="#ffffff" />
         </button>
       </div>
 
